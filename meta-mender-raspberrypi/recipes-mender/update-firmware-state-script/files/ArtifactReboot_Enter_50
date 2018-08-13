@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -e
+
+echo "$(cat /etc/mender/artifact_info): $(basename "$0") was called!" >&2
+
+# Check if mmcbkl0p2 is active part
+mount | grep /dev/mmcblk0p2
+if [ $? -eq 0 ]; then
+    inactive_part="/dev/mmcblk0p3"
+else
+    inactive_part="/dev/mmcblk0p2"
+fi
+
+mkdir -p /mnt/inactive_part
+mount ${inactive_part} /mnt/inactive_part
+
+# These are dangerous operations and if this fails (partial copy) it might
+# render the device unusable.
+#
+# There is no possibility to do this atomically
+cp -v /mnt/inactive_part/boot/bcm2835-bootfiles/* /uboot
+cp -v /mnt/inactive_part/boot/*.dtb /uboot
+cp -v /mnt/inactive_part/boot/*.dtbo /uboot/overlays
+
+umount /mnt/inactive_part
+
+exit 0
