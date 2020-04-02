@@ -23,7 +23,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/GPL-3.0;md5=c7
 URL_BASE ?= "https://d1b0l86ne08fsf.cloudfront.net/mender-convert/grub-efi"
 
 SRC_URI = " \
-    ${URL_BASE}/${PV}/${HOST_ARCH}/grub-efi-${EFI_BOOT_IMAGE};md5sum=f14815bed7a5e54fe5bb63aef3da96bf \
+    ${URL_BASE}/${PV}/${HOST_ARCH}/grub-efi-${EFI_BOOT_IMAGE};md5sum=7ec4b336f333f45abec86f6193326226 \
     ${URL_BASE}/${PV}/${HOST_ARCH}/grub-editenv;md5sum=2c5e943a0acc4a6bd385a9d3f72b637b \
 "
 
