@@ -53,10 +53,14 @@ SRC_URI_append_mender-image_mender-systemd = " file://mender-client-data-dir.ser
 
 SRC_URI_append_mender-persist-systemd-machine-id = " file://mender-client-systemd-machine-id.service \
                                                      file://mender-client-set-systemd-machine-id.sh"
+
+SRC_URI_append_mender-growfs-data_mender-systemd = " file://mender-grow-data.sh"
+
 FILES_${PN}_append_mender-image_mender-systemd = " ${systemd_unitdir}/system/${MENDER_CLIENT}-data-dir.service \
                                                    ${systemd_unitdir}/system/${MENDER_CLIENT}.service.wants/${MENDER_CLIENT}-data-dir.service"
 FILES_${PN}_append_mender-growfs-data_mender-systemd = " ${systemd_unitdir}/system/mender-grow-data.service \
-                                                         ${systemd_unitdir}/system/data.mount.wants/mender-grow-data.service"
+                                                         ${systemd_unitdir}/system/data.mount.wants/mender-grow-data.service \
+                                                         ${bindir/mender-data-growfs.sh}"
 
 FILES_${PN}_append_mender-persist-systemd-machine-id = " ${systemd_unitdir}/system/mender-systemd-machine-id.service \
                                                          ${systemd_unitdir}/system/${MENDER_CLIENT}.service.wants/${MENDER_CLIENT}-systemd-machine-id.service \
@@ -266,6 +270,14 @@ do_install_append_mender-image_mender-systemd() {
 }
 
 do_install_append_mender-growfs-data_mender-systemd() {
+    sed -i "s#@MENDER_STORAGE_DEVICE@#${MENDER_STORAGE_DEVICE}#g" \
+        ${WORKDIR}/mender-grow-data.sh
+
+    sed -i "s#@MENDER_DATA_PART_NUMBER@#${MENDER_DATA_PART_NUMBER}#g" \
+        ${WORKDIR}/mender-grow-data.sh
+
+    install -m 0755 ${WORKDIR}/mender-grow-data ${D}/${bindir}/
+
     cat <<-EOF > ${D}${systemd_unitdir}/system/mender-grow-data.service
 [Unit]
 Description=Mender service to grow data partition size
@@ -277,8 +289,7 @@ Before=systemd-growfs@data.service
 Type=oneshot
 User=root
 Group=root
-ExecStartPre=/bin/sh -c '/bin/echo "w" | /sbin/fdisk ${MENDER_STORAGE_DEVICE}'
-ExecStart=/usr/sbin/parted -s ${MENDER_STORAGE_DEVICE} resizepart ${MENDER_DATA_PART_NUMBER} 100%
+ExecStart=/usr/bin/mender-grow-data.sh
 
 [Install]
 WantedBy=data.mount
