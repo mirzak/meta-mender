@@ -141,9 +141,6 @@ IMAGE_CMD_uefiimg() {
     mender_part_image uefiimg gpt
 }
 
-addtask do_rootfs_wicenv after do_image before do_image_sdimg
-addtask do_rootfs_wicenv after do_image before do_image_uefiimg
-
 IMAGE_DEPENDS_sdimg += "${IMAGE_DEPENDS_wic} dosfstools-native mtools-native rsync-native"
 IMAGE_DEPENDS_uefiimg += "${IMAGE_DEPENDS_wic} dosfstools-native mtools-native rsync-native"
 IMAGE_DEPENDS_sdimg += " ${@bb.utils.contains('SOC_FAMILY', 'rpi', 'bcm2835-bootfiles', '', d)}"
