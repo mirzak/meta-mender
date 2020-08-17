@@ -2,7 +2,7 @@ DESCRIPTION = "Mender image artifact library"
 LICENSE = "Apache-2.0 & BSD-2-Clause & BSD-3-Clause & ISC & MIT"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/LIC_FILES_CHKSUM.sha256;md5=99143e34cf23a99976a299da9fa93bcf"
 
-# Binary download, because go is outdate in this environment
+# Binary download, because GO is outdate in this environment
 SRC_URI = "\
     https://d1b0l86ne08fsf.cloudfront.net/mender-artifact/3.3.0/linux/mender-artifact;name=artifact \
     https://raw.githubusercontent.com/mendersoftware/mender-artifact/${SRCREV}/LIC_FILES_CHKSUM.sha256;name=license \

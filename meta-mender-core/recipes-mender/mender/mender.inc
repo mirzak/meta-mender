@@ -19,8 +19,6 @@ MENDER_RETRY_POLL_INTERVAL_SECONDS ?= "300"
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
-inherit go
-
 SRC_URI_append = " file://mender.service \
                  "
 
