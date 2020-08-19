@@ -65,11 +65,11 @@ FILES_${PN} += "\
 SYSROOT_DIRS += "/data"
 
 PACKAGECONFIG ??= "modules"
-PACKAGECONFIG_append = "${@bb.utils.contains('DISTRO_FEATURES', 'mender-client-install', ' mender-client-install', '', d)}"
+PACKAGECONFIG_append = "${@bb.utils.contains('DISTRO_FEATURES', 'mender-install', ' mender-install', '', d)}"
 PACKAGECONFIG_append = "${@bb.utils.contains('DISTRO_FEATURES', 'mender-uboot', ' u-boot', '', d)}"
 PACKAGECONFIG_append = "${@bb.utils.contains('DISTRO_FEATURES', 'mender-grub', ' grub', '', d)}"
 
-PACKAGECONFIG[mender-client-install] = ",,,mender-artifact-info ca-certificates"
+PACKAGECONFIG[mender-install] = ",,,mender-artifact-info ca-certificates"
 PACKAGECONFIG[u-boot] = ",,,u-boot-fw-utils"
 PACKAGECONFIG[grub] = ",,,grub-editenv grub-mender-grubenv"
 # The docker module depends on bash, and of course on docker. However, docker is
