@@ -49,7 +49,7 @@ IMAGE_CMD_mender () {
         $extra_args \
         -f ${DEPLOY_DIR_IMAGE}/${IMAGE_BASENAME}-${MACHINE}.${ARTIFACTIMG_FSTYPE} \
         ${MENDER_ARTIFACT_EXTRA_ARGS} \
-        -o ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.mender
+        -o ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.mender
 }
 
 IMAGE_CMD_mender[vardepsexclude] += "IMAGE_ID"
