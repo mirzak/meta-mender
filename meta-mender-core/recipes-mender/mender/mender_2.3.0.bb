@@ -1,25 +1,22 @@
 DESCRIPTION = "Mender tool for doing OTA software updates."
 HOMEPAGE = "https://mender.io"
-LIC_FILES_CHKSUM = "file://LIC_FILES_CHKSUM.sha256;md5=80ba3790b689991e47685da401fd3375"
+LIC_FILES_CHKSUM = "file://LIC_FILES_CHKSUM.sha256;md5=3e7426c258f60f9876ae3746f54c49d4"
 LICENSE = "Apache-2.0 & BSD-2-Clause & BSD-3-Clause & ISC & MIT & OLDAP-2.8"
 
 SRC_URI = "\
-    git://github.com/mendersoftware/mender;protocol=https;branch=2.2.x \
-    https://d1b0l86ne08fsf.cloudfront.net/2.2.0/dist-packages/debian/armhf/mender-client_2.2.0-1_armhf.deb;name=mender-bin;unpack=0 \
+    git://github.com/mendersoftware/mender;protocol=https;branch=2.3.x \
+    https://d1b0l86ne08fsf.cloudfront.net/${PV}/dist-packages/debian/armhf/mender-client_${PV}-1_armhf.deb;name=mender-bin;unpack=0 \
     file://mender \
 "
 
-SRC_URI[mender-bin.md5sum] = "ec294ecb2ec4eb0503cab82fb6696f44"
-SRC_URI[mender-bin.sha256sum] = "1599cf9b4d53a89ae11c153de0358a3e26f5a789688e5b340c80a88f5a1357aa"
+SRC_URI[mender-bin.md5sum] = "4b708876f5d472c3633bad881944efcf"
+SRC_URI[mender-bin.sha256sum] = "7600d2ef12afadbeb502db447f40ad36753b2a06347c615583313070ea0a1877"
 
-# Tag: 2.2.0
-SRCREV = "44753ca67caba0deea203a7b9d7785c71a0c05b4"
+# Tag: 2.3.0
+SRCREV = "c570a7662d8c8766cebfe236dd71bc8657e61b71"
 
 DEPENDS += "xz"
 RDEPENDS_${PN} += "liblzma"
-
-# MEN-2948: systemd service is still named mender.service in 2.2.x
-MENDER_CLIENT = "mender"
 
 def cert_location_if_server_crt_in(src_uri, d):
     for src in src_uri.split():
@@ -27,7 +24,6 @@ def cert_location_if_server_crt_in(src_uri, d):
             return "%s/mender/server.crt" % d.getVar('sysconfdir')
     return ""
 
-MENDER_CLIENT ?= "mender-client"
 MENDER_SERVER_URL ?= "https://docker.mender.io"
 MENDER_CERT_LOCATION ??= "${@cert_location_if_server_crt_in('${SRC_URI}', d)}"
 # Tenant token
@@ -84,7 +80,7 @@ do_configure() {
 
 do_compile() {
     cd ${WORKDIR}
-    ar x ${WORKDIR}/mender-client_2.2.0-1_armhf.deb
+    ar x ${WORKDIR}/mender-client_${PV}-1_armhf.deb
 
     tar xvf data.tar.xz -C ${B}
 
