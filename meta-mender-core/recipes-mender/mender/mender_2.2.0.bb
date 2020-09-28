@@ -6,6 +6,7 @@ LICENSE = "Apache-2.0 & BSD-2-Clause & BSD-3-Clause & ISC & MIT & OLDAP-2.8"
 SRC_URI = "\
     git://github.com/mendersoftware/mender;protocol=https;branch=2.2.x \
     https://d1b0l86ne08fsf.cloudfront.net/2.2.0/dist-packages/debian/armhf/mender-client_2.2.0-1_armhf.deb;name=mender-bin;unpack=0 \
+    file://mender \
 "
 
 SRC_URI[mender-bin.md5sum] = "ec294ecb2ec4eb0503cab82fb6696f44"
@@ -210,8 +211,17 @@ do_install() {
 
     install -d ${D}/${bindir}
     install -m 755 ${B}/${bindir}/mender ${D}/${bindir}/mender
+
+    install -d ${D}${INIT_D_DIR}
+    install -m 0755 ${WORKDIR}/mender ${D}${INIT_D_DIR}/
+
+    rm ${D}/${datadir}/mender/inventory/mender-inventory-os
 }
 
 COMPATIBLE_MACHINE = "m-com"
 
 INSANE_SKIP_${PN} += "already-stripped ldflags"
+
+inherit update-rc.d
+INITSCRIPT_NAME = "mender"
+INITSCRIPT_PARAMS = "start 42 2 3 4 5 . stop 42 0 1 6 ."
